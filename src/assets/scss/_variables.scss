@@ -3,6 +3,27 @@ $bp-laptop: 1366px;
 $bp-tablet: 768px;
 $bp-mobile: 360px;
 
+@mixin desktop {
+  @media (min-width: #{$bp-desktop}) {
+    @content;
+  }
+}
+@mixin laptop {
+  @media (min-width: #{$bp-laptop}) and (max-width: #{$bp-desktop - 1px}) {
+    @content;
+  }
+}
+@mixin tablet {
+  @media (min-width: #{$bp-tablet}) and (max-width: #{$bp-laptop - 1px}) {
+    @content;
+  }
+}
+@mixin mobile {
+  @media (min-width: 0px) and (max-width: #{$bp-tablet - 1px}) {
+    @content;
+  }
+}
+
 $green-light: #b1c909;
 $green: #a5bb0c;
 $green-middle: #97ab0d;
