@@ -1,9 +1,6 @@
+<script setup lang="ts">
+import WelcomeScreen from '@/components/WelcomeScreen.vue'
+</script>
 <template>
-  <h1>test</h1>
+  <WelcomeScreen />
 </template>
-
-<style lang="scss">
-h1 {
-  color: $green-light;
-}
-</style>

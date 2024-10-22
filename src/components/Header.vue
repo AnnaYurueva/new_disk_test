@@ -14,7 +14,6 @@ import SingIn from '@/components/Icons/SingIn.vue'
 
 <style lang="scss">
 header {
-    color: $green-light;
     display: flex;
     justify-content: space-between;
     align-items: center;
