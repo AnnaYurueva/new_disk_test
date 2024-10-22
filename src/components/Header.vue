@@ -1,16 +1,27 @@
 <script setup lang="ts">
 import Button from '@/components/Ui/Button.vue'
 import Login from '@/components/Icons/Login.vue'
+import User from '@/components/Icons/User.vue'
+import { ref } from 'vue';
 
 const emits = defineEmits(['openLoginModal'])
+const checkLogin = ref(true)
 </script>
 
 <template>
     <header>
         <img src="@/assets/Logo.svg" alt="logo my notes" />
-        <Button @click="emits('openLoginModal')">
+        <Button v-if="!checkLogin" @click="emits('openLoginModal')">
             <Login /> Вход
         </Button>
+        <div v-else class="text-small user">
+            <span>
+                e-mail@mail.mail
+            </span>
+            <div class="user-avatar">
+                <User />
+            </div>
+        </div>
     </header>
 </template>
 
@@ -42,6 +53,28 @@ header {
 
     @include mobile {
         padding: 20px 20px;
+    }
+}
+
+.user {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+
+    &-avatar {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 56px;
+        height: 56px;
+        background-color: $dark-middle;
+        border-radius: 50%;
+    }
+
+    @media (max-width: $bp-mobile) {
+        span {
+            display: none;
+        }
     }
 }
 </style>

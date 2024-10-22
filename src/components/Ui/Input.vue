@@ -44,7 +44,7 @@ const limitValue = computed(() => props.setLimit ? props.maxLength : undefined);
             <slot />
         </div>
 
-        <!-- <textarea v-if="type === 'textarea'" v-model="inputData" class="text-small" :placeholder="placeholder" /> -->
+        <textarea v-if="type === 'textarea'" v-model="inputData" class="text-small" :placeholder="placeholder" />
         <div v-if="showError || setLimit" class="input-state">
             <span v-if="showError" class="input-error text-small">{{ textError }}</span>
             <span v-if="setLimit" class="input-state-count">{{ inputData.length }}/{{ maxLength }}</span>
@@ -64,8 +64,15 @@ const limitValue = computed(() => props.setLimit ? props.maxLength : undefined);
         padding: 0 24px;
     }
 
-    & input {
+    & input,
+    & textarea {
         width: 100%;
+
+        font-family: 'Montserrat', serif;
+        line-height: 28px;
+        font-size: 18px;
+        font-weight: 400;
+
         border-radius: 36px;
         padding: 22.5px 28px;
         border: 2px solid transparent;
@@ -74,6 +81,10 @@ const limitValue = computed(() => props.setLimit ? props.maxLength : undefined);
         &:hover {
             outline: 2px solid $green-light;
         }
+    }
+
+    textarea {
+        min-height: 240px;
     }
 
     &-wrapper {
