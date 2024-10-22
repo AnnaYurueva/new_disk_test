@@ -1,5 +1,5 @@
 <template>
-    <button :class="styleClass">
+    <button :class="styleClass" role="button">
         <slot />
     </button>
 </template>
@@ -10,11 +10,13 @@ import type { PropType } from 'vue';
 
 interface variants {
     default: string
+    icon: string
     text: string
 }
 
 enum enumVariants {
     default = 'default',
+    icon = 'icon',
     text = 'text',
 }
 
@@ -27,6 +29,7 @@ const props = defineProps({
 
 const styleButton: variants = {
     default: 'default',
+    icon: 'icon',
     text: 'text',
 }
 
@@ -53,6 +56,25 @@ button {
     transition: all .3s linear;
     cursor: pointer;
 
+    &.icon {
+        padding: 20px;
+        border: none;
+        background-color: $green-light;
+        color: $white;
+
+        &:hover {
+            background-color: $green-middle;
+        }
+
+        &:active {
+            background-color: $green-dark;
+        }
+
+        &:disabled {
+            background-color: $gray;
+        }
+    }
+
     &.default {
         background-color: $green-light;
         color: $white;
@@ -75,6 +97,10 @@ button {
         color: $green-light;
         background-color: transparent;
         border: none;
+        padding: 0;
+        font-size: 18px;
+        line-height: 28px;
+        font-weight: 700;
 
         &:hover {
             opacity: .7;

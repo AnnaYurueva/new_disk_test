@@ -18,6 +18,7 @@ $bp-mobile: 360px;
     @content;
   }
 }
+
 @mixin mobile {
   @media (min-width: 0px) and (max-width: #{$bp-tablet - 1px}) {
     @content;
@@ -36,3 +37,6 @@ $gray: #9da5af;
 $dark: #0a1f38;
 $dark-middle: #1b2f46;
 $dark-light: #2f4056;
+
+$error: rgba(255, 116, 97, 1);
+$error-bg: rgba(255, 116, 97, 0.1);

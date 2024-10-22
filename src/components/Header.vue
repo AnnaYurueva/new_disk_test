@@ -1,13 +1,13 @@
 <script setup lang="ts">
 import Button from '@/components/Ui/Button.vue'
-import SingIn from '@/components/Icons/SingIn.vue'
+import Login from '@/components/Icons/Login.vue'
 </script>
 
 <template>
     <header>
-        <img src="@/assets/Logo.svg" />
+        <img src="@/assets/Logo.svg" alt="logo my notes" />
         <Button>
-            <SingIn /> Вход
+            <Login /> Вход
         </Button>
     </header>
 </template>
