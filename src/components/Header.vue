@@ -1,12 +1,14 @@
 <script setup lang="ts">
 import Button from '@/components/Ui/Button.vue'
 import Login from '@/components/Icons/Login.vue'
+
+const emits = defineEmits(['openLoginModal'])
 </script>
 
 <template>
     <header>
         <img src="@/assets/Logo.svg" alt="logo my notes" />
-        <Button>
+        <Button @click="emits('openLoginModal')">
             <Login /> Вход
         </Button>
     </header>

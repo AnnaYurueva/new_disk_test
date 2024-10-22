@@ -91,6 +91,10 @@ button {
         &:disabled {
             background-color: $gray;
         }
+
+        @include mobile {
+            width: 100%;
+        }
     }
 
     &.text {

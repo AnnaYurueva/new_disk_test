@@ -3,13 +3,14 @@ import ModalTemplate from '@/components/Modals/ModalTemplate.vue'
 import Input from '@/components/Ui/Input.vue'
 import Button from '@/components/Ui/Button.vue'
 import InputPassword from '@/components/Ui/InputPassword.vue'
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 
-const emits = defineEmits(['closeModal', 'openRegistration'])
+const emits = defineEmits(['closeModal', 'openLogin'])
 
 const form = ref({
     email: '',
-    password: ''
+    password: '',
+    repeatPassword: ''
 })
 
 const loginError = ref({
@@ -18,18 +19,19 @@ const loginError = ref({
 })
 </script>
 <template>
-    <ModalTemplate @closeModal="emits('closeModal')" class="login">
-        <h2>Вход в ваш аккаунт</h2>
+    <ModalTemplate @closeModal="emits('closeModal')" class="registration">
+        <h2>Регистрация</h2>
         <Input label="Email" v-model:inputData="form.email" type="email" />
         <InputPassword label="Пароль" v-model:inputData="form.password" />
-        <div class="login-footer">
+        <InputPassword label="Пароль ещё раз" v-model:inputData="form.repeatPassword" />
+        <div class="registration-footer">
             <div>
-                <span>У вас нет аккаунта? </span>
-                <Button variant="text" @click="emits('openRegistration')">Зарегистрируйтесь</Button>
+                <span>У вас есть аккаунт? </span>
+                <Button variant="text" @click="emits('openLogin')">Войдите</Button>
             </div>
-            <Button>Войти</Button>
+            <Button>Зарегистрироваться</Button>
         </div>
-        <div v-if="loginError.value" class="login-error text-small">
+        <div v-if="loginError.value" class="registration-error text-small">
             {{ loginError.text }}
         </div>
 
@@ -37,7 +39,7 @@ const loginError = ref({
 </template>
 
 <style scoped lang="scss">
-.login {
+.registration {
     &-footer {
         display: flex;
 
