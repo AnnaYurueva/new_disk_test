@@ -5,7 +5,7 @@ import User from '@/components/Icons/User.vue'
 import { ref } from 'vue';
 
 const emits = defineEmits(['openLoginModal'])
-const checkLogin = ref(true)
+const checkLogin = ref(false)
 </script>
 
 <template>
