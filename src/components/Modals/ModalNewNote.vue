@@ -1,33 +1,84 @@
 <script setup lang="ts">
+import { ref, computed } from 'vue';
+import { createNote } from '@/api'
 import ModalTemplate from '@/components/Modals/ModalTemplate.vue'
 import Input from '@/components/Ui/Input.vue'
 import Button from '@/components/Ui/Button.vue'
-import { ref } from 'vue';
 
-const emits = defineEmits(['closeModal', 'openRegistration'])
+const emits = defineEmits(['closeModal', 'updateNotes'])
 
 const form = ref({
     title: '',
     content: ''
 })
+const success = ref(false)
 
-const loginError = ref({
+const errors = ref({});
+const isTitleValid = computed(() => form.value.title.trim() !== '');
+const isContentValid = computed(() => form.value.content.trim() !== '');
+const validateField = (field) => {
+    errors.value[field] = '';
+    if (field === 'title' && !isTitleValid.value) {
+        errors.value.title = 'Поле не может быть пустым';
+    }
+    if (field === 'content' && !isContentValid.value) {
+        errors.value.content = 'Поле не может быть пустым';
+    }
+};
+const createError = ref({
     value: false,
-    text: 'Пользователь с таким логином не найден'
+    text: ''
 })
+
+const submitForm = () => {
+    errors.value = {}
+    createError.value.value = false
+
+    validateField('title');
+    validateField('content');
+
+    let errorsCount = 0
+    for (const error of Object.values(errors.value)) {
+        if (error.length > 0) {
+            errorsCount++
+        }
+    }
+
+    if (errorsCount === 0) {
+        createNote(form.value)
+            .then(() => {
+                success.value = true
+                emits('updateNotes')
+            })
+            .catch(err => {
+                createError.value.value = true
+                createError.value.text = err.response.data.message
+            })
+    } else {
+        console.log(errors.value);
+    }
+};
 </script>
 <template>
     <ModalTemplate @closeModal="emits('closeModal')" class="note">
         <h2>Добавление заметки</h2>
-        <Input label="Название заметки" placeholder="Введите название" v-model:inputData="form.title" type="text"
-            :setLimit="true" />
-        <Input label="Текст заметки" placeholder="Введите текст" v-model:inputData="form.content" :setLimit="true"
-            :maxLength="500" type="textarea" />
-        <div class="note-footer">
-            <Button>Добавить</Button>
+        <form v-if="!success" @submit.prevent="submitForm" class="note-form">
+            <Input label="Название заметки" placeholder="Введите название" v-model:inputData="form.title" type="text"
+                :setLimit="true" :show-error="errors.title && !isTitleValid" :text-error="errors.title"
+                @blur="validateField('title')" />
+            <Input label="Текст заметки" placeholder="Введите текст" v-model:inputData="form.content" :setLimit="true"
+                :maxLength="500" type="textarea" :show-error="errors.content && !isContentValid"
+                :text-error="errors.content" @blur="validateField('content')" />
+            <div class="note-footer" type="submit">
+                <Button type="submit">Добавить</Button>
+            </div>
+        </form>
+        <div v-else class="note-form">
+            <h4>Заметка добавлена</h4>
+            <Button @click="emits('closeModal')">Готово</Button>
         </div>
-        <div v-if="loginError.value" class="note-error text-small">
-            {{ loginError.text }}
+        <div v-if="createError.value" class="note-error text-small">
+            {{ createError.text }}
         </div>
     </ModalTemplate>
 </template>
@@ -36,6 +87,12 @@ const loginError = ref({
 .note {
     &-footer {
         text-align: right;
+    }
+
+    &-form {
+        display: flex;
+        flex-direction: column;
+        gap: 40px;
     }
 
     &-error {

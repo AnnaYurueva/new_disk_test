@@ -1,44 +1,37 @@
 <script setup lang="ts">
+import { ref, onMounted } from 'vue';
 import NotesItem from '@/components/NotesItem.vue';
 import Button from '@/components/Ui/Button.vue';
 import Plus from '@/components/Icons/Plus.vue';
 import ModalNewNote from '@/components/Modals/ModalNewNote.vue'
-import { ref } from 'vue';
-const notes = [
-    {
-        "id": 10,
-        "title": "Моя заметка",
-        "content": "Сегодня эмо-сходка на Трубной"
-    },
-    {
-        "id": 10,
-        "title": "Моя заметка",
-        "content": "Не следует, однако, забывать, что базовый вектор развития предопределяет высокую востребованность позиций, занимаемых участниками в отношении поставленных задач. Вот вам яркий пример современных тенденций — повышение уровня гражданского сознания требует анализа переосмысления внешнеэкономических политик."
-    },
-    {
-        "id": 10,
-        "title": "Моя заметка",
-        "content": "Сегодня эмо-сходка на Трубной"
-    },
-    {
-        "id": 10,
-        "title": "Пример заголовока заметки в две строчки",
-        "content": "А также явные признаки победы институционализации могут быть объединены в целые кластеры себе подобных."
-    }
-]
+import { getNotes, deleteNote } from "@/api";
 
+const notes = ref([])
+
+const findNotes = async () => {
+    notes.value = await getNotes();
+}
+
+const deleteFoto = async (id: number) => {
+    await deleteNote(id)
+    await findNotes()
+}
+
+onMounted(async () => {
+    await findNotes()
+})
 const showModal = ref(false)
 </script>
 
 <template>
-    <div class="notes">
-        <NotesItem v-for="item of notes" v-bind="item" />
+    <div v-if="notes.length" class="notes">
+        <NotesItem v-for="item of notes" v-bind="item" @delete="deleteFoto(item.id)" />
     </div>
     <Button class="notes-button" variant="icon" @click="showModal = true">
         <Plus />
     </Button>
 
-    <ModalNewNote v-if="showModal" @close-modal="showModal = false" />
+    <ModalNewNote v-if="showModal" @close-modal="showModal = false" @updateNotes="findNotes" />
 </template>
 
 <style scoped lang="scss">

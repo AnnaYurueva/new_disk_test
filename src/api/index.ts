@@ -1,34 +1,59 @@
 import axios from "axios";
 import { useUserStore } from "@/stores/user";
 
-const store = useUserStore()
+const getUserToken = () => {
+    return useUserStore().getUserToken
+}
 
 const instance = axios.create({
     baseURL: 'https://dist.nd.ru/',
 });
 
-instance.interceptors.response.use(function (response) {
-    if (response?.data?.accessToken) {
-        const { accessToken } = response.data;
-        // console.log(accessToken);
+// Функция для обработки запросов, требующих токен
+const requestWithToken = async (method: string, url: string, data: any, headers = {}) => {
+    const token = getUserToken();
 
-        store.setUserToken(accessToken)
+    if (!token) {
+        throw new Error('Token not found');
     }
 
-    return response;
-}, function (error) {
-    if (error.response.status === 403 || error.response.status === 401) {
-        console.log(error);
+    return instance({
+        method,
+        url,
+        data,
+        headers: {
+            ...headers,
+            Authorization: `Bearer ${token}`,
+        },
+    });
+};
 
-    }
-    return Promise.reject(error);
-});
-
+// Функция для запросов без токена
+const requestWithoutToken = async (method: string, url: string, data?: any, headers = {}) => {
+    return instance({
+        method,
+        url,
+        data,
+        headers,
+    });
+};
 
 export const userRegistration = async data => {
-    return instance.post('/api/reg', data)
+    return requestWithoutToken('POST', '/api/reg', data)
 }
 
 export const userLogin = async data => {
-    return instance.post('/api/auth', data)
+    return requestWithoutToken('POST', '/api/auth', data)
+}
+
+export const getNotes = async () => {
+    const result = await requestWithToken('GET', '/api/notes', null)
+    return result.data
+}
+
+export const deleteNote = async (id: number) => {
+    await requestWithToken('DELETE', `/api/notes/${id}`, null)
+}
+export const createNote = async data => {
+    await requestWithToken('POST', '/api/notes', data)
 }
