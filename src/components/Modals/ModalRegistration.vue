@@ -111,7 +111,7 @@ const submitForm = () => {
 .registration {
     &-footer {
         display: flex;
-
+        gap: 40px;
         justify-content: space-between;
         align-items: center;
 

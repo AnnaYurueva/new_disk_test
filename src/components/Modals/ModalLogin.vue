@@ -96,7 +96,7 @@ const submitForm = () => {
 .login {
     &-footer {
         display: flex;
-
+        gap: 40px;
         justify-content: space-between;
         align-items: center;
 
