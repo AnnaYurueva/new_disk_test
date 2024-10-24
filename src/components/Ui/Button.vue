@@ -38,8 +38,6 @@ const styleClass = computed(() => styleButton[props.variant])
 
 <style scoped lang="scss">
 button {
-    height: 56px;
-    min-width: 56px;
     max-width: 100%;
     display: inline-flex;
     justify-content: center;

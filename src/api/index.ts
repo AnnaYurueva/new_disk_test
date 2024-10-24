@@ -46,6 +46,10 @@ export const userLogin = async data => {
     return requestWithoutToken('POST', '/api/auth', data)
 }
 
+export const userLogout = async () => {
+    return requestWithToken('DELETE', '/api/auth', null)
+}
+
 export const getNotes = async () => {
     const result = await requestWithToken('GET', '/api/notes', null)
     return result.data

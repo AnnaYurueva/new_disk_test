@@ -1,37 +1,49 @@
 <script setup lang="ts">
+import { ref } from 'vue';
+import { useUserStore } from '@/stores/user';
+import { userLogout } from '@/api'
+import router from "@/router";
 import Button from '@/components/Ui/Button.vue'
 import Login from '@/components/Icons/Login.vue'
 import User from '@/components/Icons/User.vue'
-import { ref } from 'vue';
 
 const emits = defineEmits(['openLoginModal'])
-const checkLogin = ref(false)
+const store = useUserStore()
+const showLogoutButton = ref(false)
+const logout = async () => {
+    await userLogout()
+    router.push('/')
+    showLogoutButton.value = false
+}
 </script>
 
 <template>
-    <header>
-        <img src="@/assets/Logo.svg" alt="logo my notes" />
-        <Button v-if="!checkLogin" @click="emits('openLoginModal')">
+    <header class="header">
+        <img class="header-logo" src="@/assets/Logo.svg" alt="logo my notes" />
+        <Button class="header-button-login" v-if="!store.getUserToken" @click="emits('openLoginModal')">
             <Login /> Вход
         </Button>
-        <div v-else class="text-small user">
+        <div v-else class="text-small header-user">
             <span>
                 e-mail@mail.mail
             </span>
-            <div class="user-avatar">
+            <div class="header-user-avatar" @click="showLogoutButton = !showLogoutButton">
                 <User />
             </div>
+        </div>
+        <div class="header-button-logout" v-show="showLogoutButton">
+            <Button variant="text" @click="logout">Выйти</Button>
         </div>
     </header>
 </template>
 
 <style lang="scss">
-header {
+.header {
     display: flex;
     justify-content: space-between;
     align-items: center;
 
-    img {
+    &-logo {
         width: 220px;
 
         @include mobile {
@@ -54,26 +66,55 @@ header {
     @include mobile {
         padding: 20px 20px;
     }
-}
 
-.user {
-    display: flex;
-    gap: 12px;
-    align-items: center;
-
-    &-avatar {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        width: 56px;
-        height: 56px;
-        background-color: $dark-middle;
-        border-radius: 50%;
+    &-button-login {
+        width: inherit !important;
     }
 
-    @media (max-width: $bp-mobile) {
-        span {
-            display: none;
+    &-user {
+        display: flex;
+        gap: 12px;
+        align-items: center;
+
+        &-avatar {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 56px;
+            height: 56px;
+            background-color: $dark-middle;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        @media (max-width: $bp-mobile) {
+            span {
+                display: none;
+            }
+        }
+    }
+
+    &-button-logout {
+        position: fixed;
+        top: 97px;
+        right: 80px;
+        z-index: 1;
+
+        background-color: $dark-middle;
+        padding: 40px;
+        border-radius: 12px;
+        box-shadow: 0px 15px 46px -10px rgba(0, 0, 0, 0.6);
+
+        &::before {
+            clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+            display: block;
+            background-color: $dark-middle;
+            content: "";
+            position: absolute;
+            top: -9px;
+            width: 18px;
+            height: 9px;
+            right: 20px;
         }
     }
 }

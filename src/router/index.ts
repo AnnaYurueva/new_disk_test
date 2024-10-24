@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import { useUserStore } from '@/stores/user';
 import HomeView from '../views/HomeView.vue'
 import NotesView from '../views/NotesView.vue'
 
@@ -18,11 +19,11 @@ const router = createRouter({
   ],
 })
 
-// TODO: добавить мидлвар для незалогиненых пользователей
-// router.beforeEach(async (to, from) => {
-//   // canUserAccess() returns `true` or `false`
-//   const canAccess = await canUserAccess(to)
-//   if (!canAccess) return '/login'
-// })
+router.beforeEach((to, from, next) => {
+  const store = useUserStore()
+
+  if (to.name !== 'home' && !store.getUserToken) next({ name: 'home' })
+  else next()
+})
 
 export default router
