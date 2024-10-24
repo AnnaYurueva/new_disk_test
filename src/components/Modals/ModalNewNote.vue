@@ -2,6 +2,7 @@
 import { ref, computed } from 'vue';
 import type { Ref } from 'vue';
 import { ErrorsMap } from '@/types/errors'
+import type { INote } from '@/types'
 import { createNote } from '@/api'
 import ModalTemplate from '@/components/Modals/ModalTemplate.vue'
 import Input from '@/components/Ui/Input.vue'
@@ -9,7 +10,7 @@ import Button from '@/components/Ui/Button.vue'
 
 const emits = defineEmits(['closeModal', 'updateNotes'])
 
-const form = ref({
+const form: Ref<INote> = ref({
     title: '',
     content: ''
 })
