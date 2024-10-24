@@ -1,18 +1,9 @@
 <script setup lang="ts">
 import Button from './Ui/Button.vue';
 import Close from './Icons/Close.vue';
+import type { INote } from '@/types'
 
-const props = defineProps({
-    id: {
-        type: Number
-    },
-    title: {
-        type: String
-    },
-    content: {
-        type: String
-    }
-})
+const props = defineProps<INote>()
 const emits = defineEmits(['delete'])
 </script>
 <template>
@@ -21,10 +12,10 @@ const emits = defineEmits(['delete'])
             <h4>{{ props.title }}</h4>
         </div>
         <div class="note-desc">
-            {{ content }}
+            {{ props.content }}
         </div>
         <div class="note-footer">
-            <Button @click="emits('delete', id)">
+            <Button @click="emits('delete', props.id)">
                 <Close /> Удалить
             </Button>
         </div>

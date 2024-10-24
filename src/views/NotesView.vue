@@ -1,12 +1,14 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
+import type { Ref } from 'vue';
+import type { INote } from '@/types'
 import NotesItem from '@/components/NotesItem.vue';
 import Button from '@/components/Ui/Button.vue';
 import Plus from '@/components/Icons/Plus.vue';
 import ModalNewNote from '@/components/Modals/ModalNewNote.vue'
 import { getNotes, deleteNote } from "@/api";
 
-const notes = ref([])
+const notes: Ref<INote[]> = ref([])
 
 const findNotes = async () => {
     notes.value = await getNotes();

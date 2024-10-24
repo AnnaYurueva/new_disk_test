@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue';
 import type { Ref } from 'vue';
-import { ErrorsMap } from '@/types/errors'
+import type { ErrorsMap } from '@/types/errors'
+import type { IUserRegistration } from '@/types'
 import { userRegistration } from '@/api'
 import ModalTemplate from '@/components/Modals/ModalTemplate.vue'
 import Input from '@/components/Ui/Input.vue'
@@ -10,7 +11,7 @@ import InputPassword from '@/components/Ui/InputPassword.vue'
 
 const emits = defineEmits(['closeModal', 'openLogin'])
 
-const form = ref({
+const form: Ref<IUserRegistration> = ref({
     email: '',
     password: '',
     confirm_password: ''

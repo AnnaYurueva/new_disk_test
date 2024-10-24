@@ -1,5 +1,6 @@
 import axios from "axios";
 import { useUserStore } from "@/stores/user";
+import type { IUserRegistration, IUserLogin, INote } from '@/types'
 
 const getUserToken = () => {
     return useUserStore().getUserToken
@@ -38,11 +39,11 @@ const requestWithoutToken = async (method: string, url: string, data?: any, head
     });
 };
 
-export const userRegistration = async data => {
+export const userRegistration = async (data: IUserRegistration) => {
     return requestWithoutToken('POST', '/api/reg', data)
 }
 
-export const userLogin = async data => {
+export const userLogin = async (data: IUserLogin) => {
     return requestWithoutToken('POST', '/api/auth', data)
 }
 
@@ -58,6 +59,6 @@ export const getNotes = async () => {
 export const deleteNote = async (id: number) => {
     await requestWithToken('DELETE', `/api/notes/${id}`, null)
 }
-export const createNote = async data => {
+export const createNote = async (data: INote) => {
     await requestWithToken('POST', '/api/notes', data)
 }
