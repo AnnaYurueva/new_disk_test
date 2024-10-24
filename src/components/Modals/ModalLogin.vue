@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue';
+import type { Ref } from 'vue';
 import router from "@/router";
+import { ErrorsMap } from '@/types/errors'
 import ModalTemplate from '@/components/Modals/ModalTemplate.vue'
 import Input from '@/components/Ui/Input.vue'
 import Button from '@/components/Ui/Button.vue'
@@ -13,9 +15,10 @@ const store = useUserStore()
 
 const isEmailValid = computed(() => form.value.email.trim() !== '');
 const isPasswordValid = computed(() => form.value.password.trim() !== '');
-const errors = ref({});
 
-const validateField = (field) => {
+const errors: Ref<ErrorsMap> = ref({});
+
+const validateField = (field: string) => {
     errors.value[field] = '';
     if (field === 'email' && !isEmailValid.value) {
         errors.value.email = 'Неверный email';
@@ -69,7 +72,7 @@ const submitForm = () => {
     <ModalTemplate @closeModal="emits('closeModal')" class="login">
         <h2>Вход в ваш аккаунт</h2>
         <form @submit.prevent="submitForm" class="login-form">
-            <Input label="Email" v-model:inputData="form.email" type="email" :show-error="errors.email && !isEmailValid"
+            <Input label="Email" v-model:inputData="form.email" type="email" :show-error="!isEmailValid && errors.email"
                 :text-error="errors.email" @blur="validateField('email')" />
             <InputPassword label="Пароль" v-model:inputData="form.password"
                 :show-error="errors.password || !isPasswordValid" :text-error="errors.password"

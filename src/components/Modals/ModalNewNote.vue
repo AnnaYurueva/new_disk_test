@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue';
+import type { Ref } from 'vue';
+import { ErrorsMap } from '@/types/errors'
 import { createNote } from '@/api'
 import ModalTemplate from '@/components/Modals/ModalTemplate.vue'
 import Input from '@/components/Ui/Input.vue'
@@ -13,10 +15,10 @@ const form = ref({
 })
 const success = ref(false)
 
-const errors = ref({});
+const errors: Ref<ErrorsMap> = ref({});
 const isTitleValid = computed(() => form.value.title.trim() !== '');
 const isContentValid = computed(() => form.value.content.trim() !== '');
-const validateField = (field) => {
+const validateField = (field: string) => {
     errors.value[field] = '';
     if (field === 'title' && !isTitleValid.value) {
         errors.value.title = 'Поле не может быть пустым';

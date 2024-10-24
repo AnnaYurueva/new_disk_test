@@ -1,10 +1,12 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue';
+import type { Ref } from 'vue';
+import { ErrorsMap } from '@/types/errors'
+import { userRegistration } from '@/api'
 import ModalTemplate from '@/components/Modals/ModalTemplate.vue'
 import Input from '@/components/Ui/Input.vue'
 import Button from '@/components/Ui/Button.vue'
 import InputPassword from '@/components/Ui/InputPassword.vue'
-import { userRegistration } from '@/api'
 
 const emits = defineEmits(['closeModal', 'openLogin'])
 
@@ -14,12 +16,12 @@ const form = ref({
     confirm_password: ''
 })
 
-const errors = ref({});
+const errors: Ref<ErrorsMap> = ref({});
 const isEmailValid = computed(() => form.value.email.trim() !== '' && /^[^@]+@[^@]+\.[^@]+$/.test(form.value.email) === true);
 const isPasswordValid = computed(() => form.value.password.trim() !== '');
 const isPasswordConfirmValid = computed(() => form.value.confirm_password.trim() !== '');
 const isPasswordsEqval = computed(() => form.value.confirm_password === form.value.password);
-const validateField = (field) => {
+const validateField = (field: string) => {
     errors.value[field] = '';
     if (field === 'email' && !isEmailValid.value) {
         errors.value.email = 'Неверный email';
